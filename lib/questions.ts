@@ -2,7 +2,7 @@ export const QUESTIONS: { title: string; description: string }[] = [
   {
     title: "Practice Radical Transparency",
     description:
-      "Provide the "why" and "how" behind every decision (e.g. resource allocation). Collection and use of data is everyone's responsibility — brought to and used to drive conversation, and when used to make decisions, shared with the team. In general, communication throughout the team should be clear, open and done early.",
+      "Provide the 'why' and 'how' behind every decision (e.g. resource allocation). Collection and use of data is everyone's responsibility — brought to and used to drive conversation, and when used to make decisions, shared with the team. In general, communication throughout the team should be clear, open and done early.",
   },
   {
     title: "Default to Knowledge Sharing",
