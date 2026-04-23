@@ -9,6 +9,9 @@ type Answer = { score: number; comment: string }
 const defaultAnswers = (): Answer[] =>
   QUESTIONS.map(() => ({ score: 5, comment: '' }))
 
+// -1 = framing slide, 0–N = questions
+const INTRO = -1
+
 export default function JoinPage() {
   const { code } = useParams<{ code: string }>()
   const router = useRouter()
@@ -16,7 +19,7 @@ export default function JoinPage() {
   const [session, setSession] = useState<{ id: string; status: string } | null>(null)
   const [notFound, setNotFound] = useState(false)
   const [answers, setAnswers] = useState<Answer[]>(defaultAnswers())
-  const [currentQ, setCurrentQ] = useState(0)
+  const [currentQ, setCurrentQ] = useState(INTRO)
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
@@ -124,6 +127,62 @@ export default function JoinPage() {
     )
   }
 
+  // Framing slide
+  if (currentQ === INTRO) {
+    return (
+      <main className="min-h-screen flex flex-col items-center justify-center px-6 max-w-lg mx-auto">
+        <div className="w-full">
+          <div className="mb-6 flex items-center justify-between">
+            <span className="text-xs text-gray-400 uppercase tracking-wider font-mono">{code}</span>
+          </div>
+
+          <h2 className="text-2xl font-bold text-gray-900 mb-4 leading-snug">
+            Reflecting on the past couple of weeks...
+          </h2>
+
+          <p className="text-gray-600 mb-6 leading-relaxed">
+            Please give an honest rating out of 10 on how strongly you feel you have been aligned to each of our team principles and behaviours.
+          </p>
+
+          <p className="text-sm font-semibold text-gray-700 mb-3">Try to think about:</p>
+          <ul className="space-y-2 mb-8">
+            <li className="flex gap-2 text-sm text-gray-600">
+              <span className="text-brand-500 mt-0.5">•</span>
+              Times when you have actively promoted and lived these principles in your own behaviour
+            </li>
+            <li className="flex gap-2 text-sm text-gray-600">
+              <span className="text-brand-500 mt-0.5">•</span>
+              When you may have influenced others to behave more positively
+            </li>
+            <li className="flex gap-2 text-sm text-gray-600">
+              <span className="text-brand-500 mt-0.5">•</span>
+              Any areas, on reflection, where you recognise that you could have improved
+            </li>
+          </ul>
+
+          <div className="flex gap-4 mb-8 bg-warm-100 rounded-xl p-4">
+            <div className="text-center flex-1">
+              <p className="text-2xl font-bold text-brand-600">10</p>
+              <p className="text-xs text-gray-500 mt-0.5">Very strongly aligned</p>
+            </div>
+            <div className="w-px bg-warm-300" />
+            <div className="text-center flex-1">
+              <p className="text-2xl font-bold text-gray-500">1</p>
+              <p className="text-xs text-gray-500 mt-0.5">Very strongly misaligned</p>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setCurrentQ(0)}
+            className="w-full py-3 rounded-xl bg-brand-500 text-white font-semibold hover:bg-brand-600 transition-colors"
+          >
+            Begin →
+          </button>
+        </div>
+      </main>
+    )
+  }
+
   const progress = ((currentQ + 1) / QUESTIONS.length) * 100
 
   return (
@@ -131,7 +190,7 @@ export default function JoinPage() {
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-sm text-gray-400 font-medium">Question {currentQ + 1} of {QUESTIONS.length}</span>
+          <span className="text-sm text-gray-400 font-medium">Principle {currentQ + 1} of {QUESTIONS.length}</span>
           <span className="text-xs text-gray-400 uppercase tracking-wider font-mono">{code}</span>
         </div>
         <div className="w-full h-1.5 bg-gray-100 rounded-full">
@@ -144,15 +203,18 @@ export default function JoinPage() {
 
       {/* Question */}
       <div className="flex-1">
-        <h2 className="text-xl font-semibold text-gray-900 mb-8 leading-snug">
-          {QUESTIONS[currentQ]}
+        <h2 className="text-xl font-semibold text-gray-900 mb-2 leading-snug">
+          {QUESTIONS[currentQ].title}
         </h2>
+        <p className="text-sm text-gray-500 leading-relaxed mb-8">
+          {QUESTIONS[currentQ].description}
+        </p>
 
         {/* Score selector */}
         <div className="mb-8">
-          <div className="flex justify-between text-sm text-gray-400 mb-3">
-            <span>Strongly disagree</span>
-            <span>Strongly agree</span>
+          <div className="flex justify-between text-xs text-gray-400 mb-3">
+            <span>1 — Very strongly misaligned</span>
+            <span>10 — Very strongly aligned</span>
           </div>
 
           {/* Dot selector */}

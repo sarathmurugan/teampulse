@@ -195,7 +195,7 @@ export default function ResultsPage() {
                 <div className="flex items-start justify-between mb-3 gap-4">
                   <div className="flex gap-3">
                     <span className="text-xs font-bold text-gray-400 mt-0.5 w-5 shrink-0">Q{qi + 1}</span>
-                    <p className="text-sm text-gray-700 leading-snug">{q}</p>
+                    <p className="text-sm text-gray-700 leading-snug">{q.title}</p>
                   </div>
                   <span className="text-lg font-bold text-brand-600 shrink-0">{qAvg}</span>
                 </div>
@@ -220,7 +220,7 @@ export default function ResultsPage() {
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1 pr-4">
                   <p className="text-xs font-bold text-gray-400 mb-1">Q{drillDown.questionIndex + 1}</p>
-                  <h3 className="font-semibold text-gray-900 leading-snug">{QUESTIONS[drillDown.questionIndex]}</h3>
+                  <h3 className="font-semibold text-gray-900 leading-snug">{QUESTIONS[drillDown.questionIndex].title}</h3>
                 </div>
                 <button onClick={() => setDrillDown(null)} className="text-gray-400 hover:text-gray-700 text-xl leading-none">×</button>
               </div>

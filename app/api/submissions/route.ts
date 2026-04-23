@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { QUESTION_COUNT } from '@/lib/questions'
 
 export async function POST(request: NextRequest) {
   const { session_id, answers } = await request.json()
 
-  if (!session_id || !Array.isArray(answers) || answers.length !== 10) {
+  if (!session_id || !Array.isArray(answers) || answers.length !== QUESTION_COUNT) {
     return NextResponse.json({ error: 'Invalid payload' }, { status: 400 })
   }
 
@@ -12,7 +13,7 @@ export async function POST(request: NextRequest) {
   for (const a of answers) {
     if (
       typeof a.question_index !== 'number' ||
-      a.question_index < 0 || a.question_index > 9 ||
+      a.question_index < 0 || a.question_index > QUESTION_COUNT - 1 ||
       typeof a.score !== 'number' ||
       a.score < 1 || a.score > 10
     ) {

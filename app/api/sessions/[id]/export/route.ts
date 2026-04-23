@@ -39,7 +39,7 @@ export async function GET(
 
     for (const ans of sorted) {
       const comment = ans.comment ? `"${ans.comment.replace(/"/g, '""')}"` : ''
-      const question = `"${QUESTIONS[ans.question_index]}"`
+      const question = `"${QUESTIONS[ans.question_index].title}"`
       rows.push(
         `${session.id},${session.code},${session.created_at},${sub.id},${sub.submitted_at},${ans.question_index + 1},${question},${ans.score},${comment}`
       )
