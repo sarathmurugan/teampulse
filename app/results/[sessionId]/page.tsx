@@ -103,7 +103,7 @@ export default function ResultsPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen flex items-center justify-center">
+      <main className="min-h-screen flex items-center justify-center bg-warm-50">
         <div className="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin" />
       </main>
     )
@@ -111,8 +111,8 @@ export default function ResultsPage() {
 
   if (!session) {
     return (
-      <main className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">Session not found.</p>
+      <main className="min-h-screen flex items-center justify-center bg-warm-50">
+        <p className="text-warm-500">Session not found.</p>
       </main>
     )
   }
@@ -125,23 +125,23 @@ export default function ResultsPage() {
   const overallAvg = avg(questionAverages.filter(a => a > 0))
 
   return (
-    <main className="min-h-screen px-4 py-8 max-w-3xl mx-auto">
+    <main className="min-h-screen px-4 py-8 max-w-3xl mx-auto bg-warm-50">
       {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-2xl font-bold text-gray-900">Results</h1>
-            <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${session.status === 'open' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+            <h1 className="text-3xl font-semibold text-gray-900">Results</h1>
+            <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${session.status === 'open' ? 'bg-green-100 text-green-700' : 'bg-warm-100 text-warm-500'}`}>
               {session.status === 'open' ? 'LIVE' : 'CLOSED'}
             </span>
           </div>
-          <p className="text-gray-500 text-sm font-mono tracking-widest">{session.code}</p>
+          <p className="text-warm-400 text-sm font-mono tracking-widest">{session.code}</p>
         </div>
         <div className="flex gap-2">
           {authed && (
             <button
               onClick={() => router.push('/admin')}
-              className="text-sm px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
+              className="text-sm px-3 py-1.5 rounded-lg border border-warm-200 text-warm-600 hover:bg-warm-100 transition-colors"
             >
               ← Dashboard
             </button>
@@ -159,24 +159,25 @@ export default function ResultsPage() {
 
       {/* Summary bar */}
       <div className="grid grid-cols-3 gap-4 mb-8">
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 text-center">
-          <p className="text-3xl font-bold text-brand-600">{overallAvg || '—'}</p>
-          <p className="text-xs text-gray-500 mt-1">Overall avg</p>
+        <div className="bg-white rounded-2xl border border-warm-100 shadow-sm p-4 text-center">
+          <p className="text-3xl font-semibold text-brand-500">{overallAvg || '—'}</p>
+          <p className="text-xs text-warm-500 mt-1">Overall avg</p>
         </div>
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 text-center">
-          <p className="text-3xl font-bold text-gray-800">{submissionCount}</p>
-          <p className="text-xs text-gray-500 mt-1">Submitted</p>
+        <div className="bg-white rounded-2xl border border-warm-100 shadow-sm p-4 text-center">
+          <p className="text-3xl font-semibold text-gray-800">{submissionCount}</p>
+          <p className="text-xs text-warm-500 mt-1">Submitted</p>
         </div>
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 text-center">
-          <p className="text-3xl font-bold text-gray-800">{session.max_participants}</p>
-          <p className="text-xs text-gray-500 mt-1">Total expected</p>
+        <div className="bg-white rounded-2xl border border-warm-100 shadow-sm p-4 text-center">
+          <p className="text-3xl font-semibold text-gray-800">{session.max_participants}</p>
+          <p className="text-xs text-warm-500 mt-1">Total expected</p>
         </div>
       </div>
 
       {/* Waiting state */}
       {submissionCount === 0 && (
-        <div className="text-center py-12 text-gray-400">
-          <div className="w-8 h-8 border-4 border-gray-200 border-t-brand-400 rounded-full animate-spin mx-auto mb-4" />
+        <div className="text-center py-12 text-warm-400">
+          <div className="text-4xl mb-4">🤝</div>
+          <div className="w-8 h-8 border-4 border-warm-200 border-t-brand-400 rounded-full animate-spin mx-auto mb-4" />
           <p className="text-sm">Waiting for responses...</p>
         </div>
       )}
@@ -190,14 +191,14 @@ export default function ResultsPage() {
               <button
                 key={qi}
                 onClick={() => openDrillDown(qi)}
-                className="w-full bg-white rounded-2xl border border-gray-100 shadow-sm p-5 text-left hover:border-brand-200 hover:shadow-md transition-all"
+                className="w-full bg-white rounded-2xl border border-warm-100 shadow-sm p-5 text-left hover:border-brand-300 hover:shadow-md transition-all"
               >
                 <div className="flex items-start justify-between mb-3 gap-4">
                   <div className="flex gap-3">
-                    <span className="text-xs font-bold text-gray-400 mt-0.5 w-5 shrink-0">Q{qi + 1}</span>
-                    <p className="text-sm text-gray-700 leading-snug">{q.title}</p>
+                    <span className="text-xs font-semibold text-warm-400 mt-0.5 w-5 shrink-0">P{qi + 1}</span>
+                    <p className="text-base text-gray-700 leading-snug">{q.title}</p>
                   </div>
-                  <span className="text-lg font-bold text-brand-600 shrink-0">{qAvg}</span>
+                  <span className="text-xl font-semibold text-brand-500 shrink-0">{qAvg}</span>
                 </div>
                 <ScoreBar score={qAvg} max={10} />
               </button>
@@ -213,38 +214,38 @@ export default function ResultsPage() {
           onClick={() => setDrillDown(null)}
         >
           <div
-            className="bg-white rounded-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto shadow-2xl"
+            className="bg-warm-50 rounded-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto shadow-2xl"
             onClick={e => e.stopPropagation()}
           >
             <div className="p-6">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1 pr-4">
-                  <p className="text-xs font-bold text-gray-400 mb-1">Q{drillDown.questionIndex + 1}</p>
-                  <h3 className="font-semibold text-gray-900 leading-snug">{QUESTIONS[drillDown.questionIndex].title}</h3>
+                  <p className="text-xs font-semibold text-warm-400 mb-1 uppercase tracking-wider">Principle {drillDown.questionIndex + 1}</p>
+                  <h3 className="text-lg font-semibold text-gray-900 leading-snug">{QUESTIONS[drillDown.questionIndex].title}</h3>
                 </div>
-                <button onClick={() => setDrillDown(null)} className="text-gray-400 hover:text-gray-700 text-xl leading-none">×</button>
+                <button onClick={() => setDrillDown(null)} className="text-warm-400 hover:text-warm-700 text-2xl leading-none">×</button>
               </div>
 
-              <div className="flex items-center gap-4 mb-4 bg-brand-50 rounded-xl p-4">
-                <div className="text-4xl font-bold text-brand-600">{avg(drillDown.scores)}</div>
-                <div className="text-sm text-gray-500">
+              <div className="flex items-center gap-4 mb-4 bg-brand-50 border border-brand-100 rounded-xl p-4">
+                <div className="text-4xl font-semibold text-brand-500">{avg(drillDown.scores)}</div>
+                <div className="text-sm text-warm-600">
                   Average from {drillDown.scores.length} response{drillDown.scores.length !== 1 ? 's' : ''}
                 </div>
               </div>
 
               <div className="mb-6">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Score distribution</p>
+                <p className="text-xs font-semibold text-warm-500 uppercase tracking-wider mb-3">Score distribution</p>
                 <DistributionChart scores={drillDown.scores} />
               </div>
 
               {drillDown.comments.length > 0 && (
                 <div>
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                  <p className="text-xs font-semibold text-warm-500 uppercase tracking-wider mb-3">
                     Comments ({drillDown.comments.length})
                   </p>
                   <div className="space-y-2">
                     {drillDown.comments.map((c, i) => (
-                      <div key={i} className="bg-warm-50 rounded-xl px-4 py-3 text-sm text-gray-700 italic">
+                      <div key={i} className="bg-white border border-warm-100 rounded-xl px-4 py-3 text-sm text-warm-700 italic">
                         "{c}"
                       </div>
                     ))}
@@ -253,7 +254,7 @@ export default function ResultsPage() {
               )}
 
               {drillDown.comments.length === 0 && (
-                <p className="text-sm text-gray-400 text-center py-4">No comments for this question.</p>
+                <p className="text-sm text-warm-400 text-center py-4">No comments for this principle.</p>
               )}
             </div>
           </div>

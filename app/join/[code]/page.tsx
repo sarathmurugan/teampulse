@@ -7,9 +7,8 @@ import { QUESTIONS } from '@/lib/questions'
 type Answer = { score: number; comment: string }
 
 const defaultAnswers = (): Answer[] =>
-  QUESTIONS.map(() => ({ score: 5, comment: '' }))
+  QUESTIONS.map(() => ({ score: 0, comment: '' }))
 
-// -1 = framing slide, 0–N = questions
 const INTRO = -1
 
 export default function JoinPage() {
@@ -57,6 +56,7 @@ export default function JoinPage() {
 
   function goPrev() {
     if (currentQ > 0) setCurrentQ(q => q - 1)
+    else setCurrentQ(INTRO)
   }
 
   async function handleSubmit() {
@@ -68,7 +68,7 @@ export default function JoinPage() {
       session_id: session.id,
       answers: answers.map((a, i) => ({
         question_index: i,
-        score: a.score,
+        score: a.score || 5,
         comment: a.comment,
       })),
     }
@@ -93,8 +93,8 @@ export default function JoinPage() {
     return (
       <main className="min-h-screen flex items-center justify-center px-4">
         <div className="text-center">
-          <p className="text-2xl font-bold text-gray-800 mb-2">Session not found</p>
-          <p className="text-gray-500 mb-6">This session may have closed or the code is incorrect.</p>
+          <p className="text-2xl font-semibold text-gray-800 mb-2">Session not found</p>
+          <p className="text-warm-600 mb-6">This session may have closed or the code is incorrect.</p>
           <button onClick={() => router.push('/')} className="text-brand-500 hover:underline text-sm">
             ← Back to home
           </button>
@@ -113,15 +113,11 @@ export default function JoinPage() {
 
   if (submitted) {
     return (
-      <main className="min-h-screen flex items-center justify-center px-4">
+      <main className="min-h-screen flex items-center justify-center px-4 bg-warm-50">
         <div className="text-center max-w-sm">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-4">
-            <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Submitted!</h2>
-          <p className="text-gray-500">Thank you — your responses have been recorded. The facilitator will display the results when everyone has responded.</p>
+          <div className="text-5xl mb-4">🤝</div>
+          <h2 className="text-3xl font-semibold text-gray-900 mb-3">Thank you!</h2>
+          <p className="text-warm-600 leading-relaxed">Your responses have been recorded. The facilitator will display the results when everyone has responded.</p>
         </div>
       </main>
     )
@@ -130,51 +126,51 @@ export default function JoinPage() {
   // Framing slide
   if (currentQ === INTRO) {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center px-6 max-w-lg mx-auto">
+      <main className="min-h-screen flex flex-col justify-center px-6 py-10 max-w-lg mx-auto bg-warm-50">
         <div className="w-full">
-          <div className="mb-6 flex items-center justify-between">
-            <span className="text-xs text-gray-400 uppercase tracking-wider font-mono">{code}</span>
+          <div className="mb-8 flex justify-between items-center">
+            <span className="text-xs text-warm-400 uppercase tracking-widest font-medium">{code}</span>
           </div>
 
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 leading-snug">
+          <div className="text-4xl mb-5">🤝</div>
+
+          <h2 className="text-3xl font-semibold text-gray-900 mb-4 leading-snug">
             Reflecting on the past couple of weeks...
           </h2>
 
-          <p className="text-gray-600 mb-6 leading-relaxed">
+          <p className="text-warm-700 mb-6 leading-relaxed text-lg">
             Please give an honest rating out of 10 on how strongly you feel you have been aligned to each of our team principles and behaviours.
           </p>
 
-          <p className="text-sm font-semibold text-gray-700 mb-3">Try to think about:</p>
-          <ul className="space-y-2 mb-8">
-            <li className="flex gap-2 text-sm text-gray-600">
-              <span className="text-brand-500 mt-0.5">•</span>
-              Times when you have actively promoted and lived these principles in your own behaviour
-            </li>
-            <li className="flex gap-2 text-sm text-gray-600">
-              <span className="text-brand-500 mt-0.5">•</span>
-              When you may have influenced others to behave more positively
-            </li>
-            <li className="flex gap-2 text-sm text-gray-600">
-              <span className="text-brand-500 mt-0.5">•</span>
-              Any areas, on reflection, where you recognise that you could have improved
-            </li>
+          <p className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Try to think about:</p>
+          <ul className="space-y-3 mb-8">
+            {[
+              'Times when you have actively promoted and lived these principles in your own behaviour',
+              'When you may have influenced others to behave more positively',
+              'Any areas, on reflection, where you recognise that you could have improved',
+            ].map((point, i) => (
+              <li key={i} className="flex gap-3 text-warm-700 leading-snug">
+                <span className="text-brand-400 mt-0.5 shrink-0">•</span>
+                {point}
+              </li>
+            ))}
           </ul>
 
-          <div className="flex gap-4 mb-8 bg-warm-100 rounded-xl p-4">
+          <div className="flex gap-4 mb-8 bg-warm-100 border border-warm-200 rounded-2xl p-5">
             <div className="text-center flex-1">
-              <p className="text-2xl font-bold text-brand-600">10</p>
-              <p className="text-xs text-gray-500 mt-0.5">Very strongly aligned</p>
+              <p className="text-3xl font-semibold text-brand-500">10</p>
+              <p className="text-xs text-warm-600 mt-1">Very strongly aligned</p>
             </div>
             <div className="w-px bg-warm-300" />
             <div className="text-center flex-1">
-              <p className="text-2xl font-bold text-gray-500">1</p>
-              <p className="text-xs text-gray-500 mt-0.5">Very strongly misaligned</p>
+              <p className="text-3xl font-semibold text-warm-500">1</p>
+              <p className="text-xs text-warm-600 mt-1">Very strongly misaligned</p>
             </div>
           </div>
 
           <button
             onClick={() => setCurrentQ(0)}
-            className="w-full py-3 rounded-xl bg-brand-500 text-white font-semibold hover:bg-brand-600 transition-colors"
+            className="w-full py-4 rounded-2xl bg-brand-500 text-white font-semibold text-lg hover:bg-brand-600 transition-colors"
           >
             Begin →
           </button>
@@ -184,18 +180,19 @@ export default function JoinPage() {
   }
 
   const progress = ((currentQ + 1) / QUESTIONS.length) * 100
+  const currentScore = answers[currentQ].score
 
   return (
-    <main className="min-h-screen flex flex-col px-4 py-8 max-w-lg mx-auto">
+    <main className="min-h-screen flex flex-col px-5 py-8 max-w-lg mx-auto bg-warm-50">
       {/* Header */}
       <div className="mb-6">
-        <div className="flex items-center justify-between mb-1">
-          <span className="text-sm text-gray-400 font-medium">Principle {currentQ + 1} of {QUESTIONS.length}</span>
-          <span className="text-xs text-gray-400 uppercase tracking-wider font-mono">{code}</span>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm text-warm-500 font-medium">Principle {currentQ + 1} of {QUESTIONS.length}</span>
+          <span className="text-xs text-warm-400 uppercase tracking-widest font-medium">{code}</span>
         </div>
-        <div className="w-full h-1.5 bg-gray-100 rounded-full">
+        <div className="w-full h-1 bg-warm-200 rounded-full">
           <div
-            className="h-1.5 bg-brand-500 rounded-full transition-all duration-300"
+            className="h-1 bg-brand-500 rounded-full transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -203,54 +200,50 @@ export default function JoinPage() {
 
       {/* Question */}
       <div className="flex-1">
-        <h2 className="text-xl font-semibold text-gray-900 mb-2 leading-snug">
+        <h2 className="text-2xl font-semibold text-gray-900 mb-2 leading-snug">
           {QUESTIONS[currentQ].title}
         </h2>
-        <p className="text-sm text-gray-500 leading-relaxed mb-8">
+        <p className="text-warm-600 leading-relaxed mb-8 text-base">
           {QUESTIONS[currentQ].description}
         </p>
 
-        {/* Score selector */}
-        <div className="mb-8">
-          <div className="flex justify-between text-xs text-gray-400 mb-3">
-            <span>1 — Very strongly misaligned</span>
-            <span>10 — Very strongly aligned</span>
-          </div>
-
-          {/* Dot selector */}
-          <div className="flex gap-2 justify-between">
-            {[1,2,3,4,5,6,7,8,9,10].map(n => (
-              <button
-                key={n}
-                onClick={() => setScore(n)}
-                className={`flex-1 aspect-square rounded-lg font-semibold text-sm transition-all
-                  ${answers[currentQ].score === n
-                    ? 'bg-brand-500 text-white shadow-md scale-110'
-                    : 'bg-white border border-gray-200 text-gray-600 hover:border-brand-400 hover:text-brand-600'
-                  }`}
-              >
-                {n}
-              </button>
+        {/* Handshake score selector — 2 rows of 5 */}
+        <div className="mb-3">
+          <div className="grid grid-cols-5 gap-2 mb-2">
+            {[1, 2, 3, 4, 5].map(n => (
+              <HandshakeButton key={n} n={n} selected={currentScore === n} onSelect={setScore} />
             ))}
           </div>
-
-          <div className="mt-4 text-center">
-            <span className="text-4xl font-bold text-brand-500">{answers[currentQ].score}</span>
-            <span className="text-gray-400 text-sm ml-1">/ 10</span>
+          <div className="grid grid-cols-5 gap-2">
+            {[6, 7, 8, 9, 10].map(n => (
+              <HandshakeButton key={n} n={n} selected={currentScore === n} onSelect={setScore} />
+            ))}
           </div>
         </div>
 
+        <div className="flex justify-between text-xs text-warm-400 mb-6 px-1">
+          <span>1 — Very strongly misaligned</span>
+          <span>10 — Very strongly aligned</span>
+        </div>
+
+        {currentScore > 0 && (
+          <div className="text-center mb-6">
+            <span className="text-5xl font-semibold text-brand-500">{currentScore}</span>
+            <span className="text-warm-400 text-lg ml-1">/ 10</span>
+          </div>
+        )}
+
         {/* Comment */}
         <div className="mb-8">
-          <label className="block text-sm font-medium text-gray-600 mb-2">
-            Comment <span className="text-gray-400 font-normal">(optional, anonymous)</span>
+          <label className="block text-sm font-medium text-warm-700 mb-2">
+            Comment <span className="text-warm-400 font-normal">(optional, anonymous)</span>
           </label>
           <textarea
             value={answers[currentQ].comment}
             onChange={e => setComment(e.target.value)}
             placeholder="Share any thoughts..."
             rows={3}
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+            className="w-full px-4 py-3 rounded-xl border border-warm-200 bg-white text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent placeholder:text-warm-300"
           />
         </div>
 
@@ -258,11 +251,10 @@ export default function JoinPage() {
       </div>
 
       {/* Navigation */}
-      <div className="flex gap-3 pt-4">
+      <div className="flex gap-3 pt-2">
         <button
           onClick={goPrev}
-          disabled={currentQ === 0}
-          className="flex-1 py-3 rounded-xl border border-gray-200 text-gray-600 font-medium hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="flex-1 py-3 rounded-xl border border-warm-200 text-warm-600 font-medium hover:bg-warm-100 transition-colors"
         >
           Back
         </button>
@@ -270,20 +262,49 @@ export default function JoinPage() {
         {currentQ < QUESTIONS.length - 1 ? (
           <button
             onClick={goNext}
-            className="flex-2 flex-1 py-3 rounded-xl bg-brand-500 text-white font-semibold hover:bg-brand-600 transition-colors"
+            disabled={currentScore === 0}
+            className="flex-1 py-3 rounded-xl bg-brand-500 text-white font-semibold hover:bg-brand-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             Next
           </button>
         ) : (
           <button
             onClick={handleSubmit}
-            disabled={submitting}
-            className="flex-1 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            disabled={submitting || currentScore === 0}
+            className="flex-1 py-3 rounded-xl bg-green-700 text-white font-semibold hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {submitting ? 'Submitting...' : 'Submit'}
           </button>
         )}
       </div>
     </main>
+  )
+}
+
+function HandshakeButton({
+  n,
+  selected,
+  onSelect,
+}: {
+  n: number
+  selected: boolean
+  onSelect: (n: number) => void
+}) {
+  return (
+    <button
+      onClick={() => onSelect(n)}
+      className={`flex flex-col items-center justify-center py-3 rounded-xl border-2 transition-all active:scale-95
+        ${selected
+          ? 'border-brand-500 bg-brand-50 scale-105 shadow-md'
+          : 'border-warm-200 bg-white hover:border-brand-300 hover:bg-warm-50'
+        }`}
+    >
+      <span className={`text-2xl leading-none mb-1 transition-all ${selected ? 'grayscale-0' : 'grayscale opacity-40'}`}>
+        🤝
+      </span>
+      <span className={`text-xs font-semibold ${selected ? 'text-brand-600' : 'text-warm-400'}`}>
+        {n}
+      </span>
+    </button>
   )
 }
