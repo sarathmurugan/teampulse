@@ -38,7 +38,7 @@ export default function Home() {
         <div className="text-center mb-10">
           <div className="text-5xl mb-4">🤝</div>
           <h1 className="text-4xl font-semibold text-gray-900">TeamPulse</h1>
-          <p className="mt-2 text-warm-500 text-base italic">Team sentiment, together.</p>
+          <p className="mt-2 text-warm-500 text-base italic">Pace Principles Check In</p>
         </div>
 
         <form onSubmit={handleJoin} className="space-y-4">
