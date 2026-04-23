@@ -104,6 +104,12 @@ export default function AdminPage() {
     fetchSessions()
   }
 
+  async function deleteSession(id: string) {
+    if (!confirm('Delete this session? This cannot be undone.')) return
+    await fetch(`/api/sessions/${id}`, { method: 'DELETE' })
+    fetchSessions()
+  }
+
   // Login screen
   if (authed === null) {
     return (
@@ -195,6 +201,7 @@ export default function AdminPage() {
                 key={s.id}
                 session={s}
                 onClose={() => closeSession(s.id)}
+                onDelete={() => deleteSession(s.id)}
                 onViewResults={() => router.push(`/results/${s.id}`)}
               />
             ))}
@@ -211,6 +218,7 @@ export default function AdminPage() {
               <SessionCard
                 key={s.id}
                 session={s}
+                onDelete={() => deleteSession(s.id)}
                 onViewResults={() => router.push(`/results/${s.id}`)}
               />
             ))}
@@ -232,10 +240,12 @@ export default function AdminPage() {
 function SessionCard({
   session,
   onClose,
+  onDelete,
   onViewResults,
 }: {
   session: SessionWithCount
   onClose?: () => void
+  onDelete: () => void
   onViewResults: () => void
 }) {
   const isOpen = session.status === 'open'
@@ -285,6 +295,12 @@ function SessionCard({
               Close
             </button>
           )}
+          <button
+            onClick={onDelete}
+            className="text-xs px-3 py-1.5 rounded-lg border border-red-200 text-red-500 hover:bg-red-50 transition-colors"
+          >
+            Delete
+          </button>
         </div>
       </div>
 
