@@ -181,6 +181,8 @@ export default function JoinPage() {
 
   const progress = ((currentQ + 1) / QUESTIONS.length) * 100
   const currentScore = answers[currentQ].score
+  const requiresComment = currentScore > 0 && currentScore <= 5
+  const commentMissing = requiresComment && !answers[currentQ].comment.trim()
 
   return (
     <main className="min-h-screen flex flex-col px-5 py-8 max-w-lg mx-auto bg-warm-50">
@@ -236,15 +238,24 @@ export default function JoinPage() {
         {/* Comment */}
         <div className="mb-8">
           <label className="block text-sm font-medium text-warm-700 mb-2">
-            Comment <span className="text-warm-400 font-normal">(optional, anonymous)</span>
+            Comment{' '}
+            <span className="text-warm-400 font-normal">
+              {requiresComment ? '(required for scores of 5 or below)' : '(optional, anonymous)'}
+            </span>
           </label>
           <textarea
             value={answers[currentQ].comment}
             onChange={e => setComment(e.target.value)}
-            placeholder="Share any thoughts..."
+            placeholder={requiresComment ? 'Please share some context for your score...' : 'Share any thoughts...'}
             rows={3}
-            className="w-full px-4 py-3 rounded-xl border border-warm-200 bg-white text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent placeholder:text-warm-300"
+            className={`w-full px-4 py-3 rounded-xl border bg-white text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent placeholder:text-warm-300
+              ${requiresComment && commentMissing ? 'border-brand-300' : 'border-warm-200'}`}
           />
+          {requiresComment && commentMissing && (
+            <p className="text-sm text-brand-500 mt-2">
+              Please add a comment before continuing.
+            </p>
+          )}
         </div>
 
         {error && <p className="text-sm text-red-600 mb-4 text-center">{error}</p>}
@@ -262,7 +273,7 @@ export default function JoinPage() {
         {currentQ < QUESTIONS.length - 1 ? (
           <button
             onClick={goNext}
-            disabled={currentScore === 0}
+            disabled={currentScore === 0 || commentMissing}
             className="flex-1 py-3 rounded-xl bg-brand-500 text-white font-semibold hover:bg-brand-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             Next
@@ -270,7 +281,7 @@ export default function JoinPage() {
         ) : (
           <button
             onClick={handleSubmit}
-            disabled={submitting || currentScore === 0}
+            disabled={submitting || currentScore === 0 || commentMissing}
             className="flex-1 py-3 rounded-xl bg-green-700 text-white font-semibold hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {submitting ? 'Submitting...' : 'Submit'}

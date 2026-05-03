@@ -105,7 +105,6 @@ export default function AdminPage() {
   }
 
   async function deleteSession(id: string) {
-    if (!confirm('Delete this session? This cannot be undone.')) return
     await fetch(`/api/sessions/${id}`, { method: 'DELETE' })
     fetchSessions()
   }
@@ -161,9 +160,14 @@ export default function AdminPage() {
           <h1 className="text-3xl font-semibold text-gray-900">TeamPulse</h1>
           <p className="text-warm-500 text-sm italic">Facilitator Dashboard</p>
         </div>
-        <button onClick={handleLogout} className="text-sm text-warm-400 hover:text-warm-700 transition-colors">
-          Logout
-        </button>
+        <div className="flex items-center gap-4">
+          <a href="/report" className="text-sm text-warm-500 hover:text-warm-800 transition-colors">
+            View Report →
+          </a>
+          <button onClick={handleLogout} className="text-sm text-warm-400 hover:text-warm-700 transition-colors">
+            Logout
+          </button>
+        </div>
       </div>
 
       {/* Create Session */}
@@ -253,6 +257,7 @@ function SessionCard({
   const pct = Math.round((session.submission_count / session.max_participants) * 100)
 
   const [copied, setCopied] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
 
   function copy() {
     navigator.clipboard.writeText(joinUrl)
@@ -295,12 +300,29 @@ function SessionCard({
               Close
             </button>
           )}
-          <button
-            onClick={onDelete}
-            className="text-xs px-3 py-1.5 rounded-lg border border-red-200 text-red-500 hover:bg-red-50 transition-colors"
-          >
-            Delete
-          </button>
+          {!confirmDelete ? (
+            <button
+              onClick={() => setConfirmDelete(true)}
+              className="text-xs px-3 py-1.5 rounded-lg border border-red-200 text-red-500 hover:bg-red-50 transition-colors"
+            >
+              Delete
+            </button>
+          ) : (
+            <div className="flex gap-1">
+              <button
+                onClick={onDelete}
+                className="text-xs px-3 py-1.5 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
+              >
+                Confirm
+              </button>
+              <button
+                onClick={() => setConfirmDelete(false)}
+                className="text-xs px-3 py-1.5 rounded-lg border border-warm-200 text-warm-600 hover:bg-warm-50 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
